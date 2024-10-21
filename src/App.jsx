@@ -15,7 +15,7 @@ const InputText = ({label, value, type, onChange}) => {
 
 
 // const IDProfile = [
-  
+
 //   {
 //     "ID" : "2378934023",
 //     "name" : "Aldo Kurniawan"
@@ -46,21 +46,74 @@ function App() {
     username : '',
     phoneNumber : '',
     password : '',
-    confirmPassword : '',
     reasonRegist : '',
   })
-  const [error, setError] = useState('')
+  const [error, setError] = useState({
+    identityNumber : '',
+    email : '',
+    username : '',
+    phoneNumber : '',
+    password : '',
+    reasonRegist : '',
+  })
+  const [countSubmit, setCountSubmit] = useState(0)
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    error ? alert(error) : alert(form.identityNumber);
-    console.log(form);
+
+    const newError = {
+      identityNumber : '',
+      email : '',
+      username : '',
+      phoneNumber : '',
+      password : '',
+      reasonRegist : '',
+    }
+
+    if (form.identityNumber.length < 3){
+      newError.identityNumber = 'Kurang dari 3'
+    }
+    if (form.email.length < 3){
+      newError.email = 'Kurang dari 3'
+    }
+    if (form.username.length < 3){
+      newError.username = 'Kurang dari 3'
+    }
+    if (form.phoneNumber.length < 3){
+      newError.phoneNumber = 'Kurang dari 3'
+    }
+    if (form.password.length < 3){
+      newError.password = 'Kurang dari 3'
+    }
+    if (form.reasonRegist.length < 3){
+      newError.reasonRegist = 'Kurang dari 3'
+    }
+
+    setError(newError)
+
+    if(!newError.identityNumber && !newError.email && !newError.username && !newError.phoneNumber && !newError.password && !newError.confirmPassword && !newError.reasonRegist){
+      alert('tes')
+    } else {
+      alert('error')
+    }
+
+    setCountSubmit(countSubmit + 1)
+    // error ? alert(error) : alert(form.identityNumber);
+    // console.log(form);
   }
 
-  const handleChange = (e) => {
-    const { value } = e.target;
-    setForm({ ...form, identityNumber: value }); // Selalu update state
-    value.length < 3 ? setError('Field Minimal 3 Karakter') : setError('');
+  const handleChange = (field, e) => {
+    // const { value } = e.target;
+
+    if(countSubmit >= 1){
+      if (e.target.value.length < 3) {
+        setError({...error, [field]: `isi ${field} harus lebih dari 3`})
+        } else {
+        setError({...error, [field]: ''})
+      }
+    }
+
+    setForm({ ...form, [field]: e.target.value }); // Selalu update state
   }
 
   return (
@@ -71,26 +124,41 @@ function App() {
         <form action="" className='mt-16 text-sm' onSubmit={handleSubmit}>
           
           <ul className='flex flex-col gap-10'>
-          <InputText label='Identity Number' type='number' value={form.identityNumber} onChange={handleChange} />
 
-          <InputText label='Email' type='text' value={form.email} onChange={(e) => setForm({...form, email : e.target.value})}/>
+          <InputText label='Identity Number' type='number' value={form.identityNumber} onChange={(e) => {handleChange('identityNumber', e)}}/>
 
-          <InputText label='Username' type='text' value={form.username} onChange={(e) => setForm({...form, username : e.target.value})}/>
+          <InputText label='Email' type='text' value={form.email} onChange={(e) => {handleChange('email', e)}}/>
 
-          <InputText label='Phone Number' type='number' value={form.phoneNumber} onChange={(e) => setForm({...form, phoneNumber : e.target.value})}/>
+          <InputText label='Username' type='text' value={form.username} onChange={(e) => {handleChange('username', e)}}/>
 
-          <InputText label='Password' type='password' value={form.password} onChange={(e) => setForm({...form, password : e.target.value})}/>
+          <InputText label='Phone Number' type='number' value={form.phoneNumber} onChange={(e) => {handleChange('phoneNumber', e)}}/>
 
-          <InputText label='Confirm Password' type='password' value={form.confirmPassword} onChange={(e) => setForm({...form, confirmPassword : e.target.value})} />
+          <InputText label='Password' type='password' value={form.password} onChange={(e) => {handleChange('password', e)}}/>
+          <ul>
+          Password harus mengandung setidaknya:
+            <li className={`${!/^[a-zA-Z0-9]*$/.test(form.password) ? 'text-green-300' : 'text-black'}`}> 8 - 30 Karakter</li>
+            <li className={`${/[0-9]/.test(form.password) ? 'text-green-600' : 'text-red-600'}`}> 1 Angka (0-9)</li>
+            <li> Huruf besar (A-Z) dan 1 huruf kecil (a-z)</li>
+            <li> 1 Karakter spesial(contoh:*,#,&,dsb)</li>
+          </ul>
 
           <label htmlFor="" className='text-sm font-medium'> Reason for Registration <span className='text-[#D19675] font-bold'>*</span>
-            <textarea type='text' name='textArea' className='block mt-4 outline-none bg-transparent border-b border-[#BDBDBD] w-full text-sm font-light text-[#BDBDBD] tracking-wider h-32 placeholder:font-extralight' placeholder='Reason For Registration' value={form.reasonRegist} onChange={(e) => setForm({...form, reasonRegist : e.target.value})}/>
+            <textarea type='text' name='textArea' className='block mt-4 outline-none bg-transparent border-b border-[#BDBDBD] w-full text-sm font-light text-[#BDBDBD] tracking-wider h-32 placeholder:font-extralight' placeholder='Reason For Registration' value={form.reasonRegist} onChange={(e) => {handleChange('reasonRegist', e)}}/>
           </label>
 
           <input type="submit" className='bg-stone-200 h-32 cursor-pointer font-light tracking-widest'/>
-
           </ul>
 
+          <ul>
+          {error.identityNumber && <li>{error.identityNumber}</li>}
+          {error.email && <li>{error.email}</li>}
+          {error.username && <li>{error.username}</li>}
+          {error.phoneNumber && <li>{error.phoneNumber}</li>}
+          {error.password && <li>{error.password}</li>}
+          {error.confirmPassword && <li>{error.confirmPassword}</li>}
+          {error.reasonRegist && <li>{error.reasonRegist}</li>}
+          </ul>
+          
           {/* <label htmlFor="" className='text-sm font-medium'>Country
           <input type="dropdown" className='block mt-2 outline-none bg-transparent border-b border-[#BDBDBD] w-full'/>
           </label> */}
@@ -106,7 +174,6 @@ function App() {
             </span>
           </label> */}
 
-          
 
         </form>
       </div>        

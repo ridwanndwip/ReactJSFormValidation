@@ -85,6 +85,8 @@ function ValidationMultiField() {
     email : '',
   })
 
+  const [submitCount, setSubmitCount] = useState(0)
+
   const handleSubmit = (e) => {
     e.preventDefault()
 
@@ -106,14 +108,18 @@ function ValidationMultiField() {
     }
 
     // Validasi untuk setiap field
-    if (form.name.length < 3) {
+    if (form.name.length <= 3) {
       newError.name = 'isi name harus lebih dari 3'
+      setForm({...form, name : ''});
     }
+
     if (form.numberPhone.length < 3) {
       newError.numberPhone = 'isi numberPhone harus lebih dari 3'
+      setForm({...form, numberPhone : ''});
     }
     if (form.email.length < 3) {
       newError.email = 'isi email harus lebih dari 3'
+      setForm({...form, email : ''});
     }
 
     setError(newError)
@@ -121,9 +127,24 @@ function ValidationMultiField() {
      // Jika tidak ada error, lakukan tindakan berikut
     if (!newError.name && !newError.numberPhone && !newError.email) {
       alert('Validasi sukses')
-      // Proses lebih lanjut, misalnya mengirim data ke server
 
+      // Reset form fields ke string kosong
+      setForm({
+        name: '',
+        numberPhone: '',
+        email: '',
+      })
+      // Proses lebih lanjut, misalnya mengirim data ke server
+    } else {
+      alert ('ada kesalahan dalam form')
+      // setForm({
+      //   name: '',
+      //   numberPhone: '',
+      //   email: '',
+      // })
     }
+
+    setSubmitCount(submitCount + 1)
   }
 
   const handleChange = (field, e) => {
@@ -131,14 +152,17 @@ function ValidationMultiField() {
     // setError('')
     const value = e.target.value
     
-    // if (value.length < 3) {
-    // setError({...error, [field]: `isi ${field} harus lebih dari 3`})
-    // } else {
-    // setError({...error, [field]: ''})
-    // }
-
-    setForm({...form, [field]: value})
-  
+    if(submitCount >= 1){
+      if (value.length < 3) {
+        setError({...error, [field]: `isi ${field} harus lebih dari 3`})
+        } else {
+        setError({...error, [field]: ''})
+      }
+    }
+      
+    setForm({
+      ...form,  //buat salinan dari form yang ada
+      [field]: value}) // update field yang relevan
   }
   
   return (
@@ -154,7 +178,7 @@ function ValidationMultiField() {
         {/* {error.numberPhone} */}
         <br/>
         <label htmlFor="">Number phone : </label>
-        <input type="text" name='Number Phone' value={form.numberPhone} onChange={(e) => {handleChange('numberPhone', e)}} className={form.numberPhone.length < 3 ? 'bg-red-300' : 'bg-none'}/>
+        <input type="text" name='Number Phone' value={form.numberPhone} onChange={(e) => {handleChange('numberPhone', e)}} className={`${form.numberPhone && form.numberPhone.length < 3 ? 'bg-red-300' : 'bg-none'}`}/>
         <br/><br/>
 
         {/* {error.email} */}
