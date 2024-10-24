@@ -13,30 +13,15 @@ const InputText = ({label, value, type, onChange}) => {
     )
 }
 
+const PasswordList = ({title, validation }) => {
+  return(
+    <li className={`
+      ${validation}
+      before:content-[''] before:w-1 before:h-1 before:rounded-full before:inline-block before:mb-[2px] before:mr-1`}> {title}
+      </li>
+  )
+}
 
-// const IDProfile = [
-
-//   {
-//     "ID" : "2378934023",
-//     "name" : "Aldo Kurniawan"
-//   },
-//   {
-//     "ID" : "2378936724",
-//     "name" : "Hakim Al Nasr"
-//   },
-//   {
-//     "ID" : "2348544003",
-//     "name" : "Ridwan Dwi P"
-//   },
-//   {
-//     "ID" : "2378564083",
-//     "name" : "Fitrah Algifari"
-//   },
-//   {
-//     "ID" : "2378834012",
-//     "name" : "Riski Sadar"
-//   },
-// ]
 
 function App() {
   
@@ -75,6 +60,8 @@ function App() {
     }
     if (form.email.length < 3){
       newError.email = 'Kurang dari 3'
+    }else if (!/[@]/.test(form.email)){
+      newError.email = 'Email not valid'
     }
     if (form.username.length < 3){
       newError.username = 'Kurang dari 3'
@@ -134,12 +121,17 @@ function App() {
           <InputText label='Phone Number' type='number' value={form.phoneNumber} onChange={(e) => {handleChange('phoneNumber', e)}}/>
 
           <InputText label='Password' type='password' value={form.password} onChange={(e) => {handleChange('password', e)}}/>
-          <ul>
-          Password harus mengandung setidaknya:
-            <li className={`${!/^[a-zA-Z0-9]*$/.test(form.password) ? 'text-green-300' : 'text-black'}`}> 8 - 30 Karakter</li>
-            <li className={`${/[0-9]/.test(form.password) ? 'text-green-600' : 'text-red-600'}`}> 1 Angka (0-9)</li>
-            <li> Huruf besar (A-Z) dan 1 huruf kecil (a-z)</li>
-            <li> 1 Karakter spesial(contoh:*,#,&,dsb)</li>
+          <ul className='flex flex-col gap-1 -mt-7 text-xs'>
+          <li>
+            <span>Password must contain at least:</span>
+          </li>
+          <PasswordList validation={form.password.length >= 8 ? 'before:bg-green-600 text-green-600': 'before:bg-red-600 text-red-600'} title='More thank 8 characters'/>
+          
+          <PasswordList validation={/[0-9]/.test(form.password) ? 'before:bg-green-600 text-green-600': 'before:bg-red-600 text-red-600'} title='1 number (0-9)'/>
+
+          <PasswordList validation={/[A-Z]/.test(form.password) ? 'before:bg-green-600 text-green-600': 'before:bg-red-600 text-red-600'} title='1 uppercase letter (A-Z) dan 1 lowercase letter (a-z)'/>
+
+          <PasswordList validation={/[!@#$%^&*(),.?":{}|<>]/.test(form.password) ? 'before:bg-green-600 text-green-600': 'before:bg-red-600 text-red-600'} title='1 special character (e.g.,*,#,&,dsb)'/>
           </ul>
 
           <label htmlFor="" className='text-sm font-medium'> Reason for Registration <span className='text-[#D19675] font-bold'>*</span>
@@ -173,7 +165,6 @@ function App() {
               <input type='checkbox' className=''/>
             </span>
           </label> */}
-
 
         </form>
       </div>        
