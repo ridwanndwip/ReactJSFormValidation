@@ -1,13 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import React from 'react'
 
-const InputText = ({label, value, type, onChange}) => {
+const InputText = ({label, value, type, onChange, className}) => {
 
   return (
     <li className='flex flex-col md:flex-row md:items-center md:border-b md:border-[#BDBDBD] md:gap-8 md:pb-3'>
       <label htmlFor="" className='block text-sm font-medium md:w-4/5 lg:w-1/2 xl:w-1/3 md:text-base after:content-["*"] after:ml-0.5 after:text-[#D19675]'>{label}</label>
       <div className='w-full relative'>
-        <input type={type} className='mt-2 outline-none bg-transparent border-b border-[#BDBDBD] w-full py-4 text-sm font-light text-slate-500 tracking-widest placeholder:font-extralight md:border-none md:m-0' value={value} onChange={onChange} placeholder={label}/>
+        <input type={type} className={`${className} mt-2 outline-none bg-transparent border-b border-[#BDBDBD] w-full py-4 text-sm font-light text-slate-500 tracking-widest placeholder:font-extralight md:border-none md:m-0`} value={value} onChange={onChange} placeholder={label}/>
       </div>
     </li>
     )
@@ -21,7 +21,6 @@ const PasswordList = ({title, validation }) => {
       </li>
   )
 }
-
 
 function App() {
   
@@ -120,25 +119,33 @@ function App() {
 
           <InputText label='Phone Number' type='number' value={form.phoneNumber} onChange={(e) => {handleChange('phoneNumber', e)}}/>
 
-          <InputText label='Password' type='password' value={form.password} onChange={(e) => {handleChange('password', e)}}/>
+          <InputText label='Password' type='password' value={form.password} onChange={(e) => {handleChange('password', e)}} className={'bg-black'}/>
+          
           <ul className='flex flex-col gap-1 -mt-7 text-xs'>
           <li>
             <span>Password must contain at least:</span>
           </li>
-          <PasswordList validation={form.password.length >= 8 ? 'before:bg-green-600 text-green-600': 'before:bg-red-600 text-red-600'} title='More thank 8 characters'/>
+          <PasswordList validation={form.password.length >= 8 ? 'before:bg-green-800 text-green-800': 'before:bg-[#D19675] text-[#D19675]'} title='More thank 8 characters'/>
           
-          <PasswordList validation={/[0-9]/.test(form.password) ? 'before:bg-green-600 text-green-600': 'before:bg-red-600 text-red-600'} title='1 number (0-9)'/>
+          <PasswordList validation={/[0-9]/.test(form.password) ? 'before:bg-green-800 text-green-800': 'before:bg-[#D19675] text-[#D19675]'} title='1 number (0-9)'/>
 
-          <PasswordList validation={/[A-Z]/.test(form.password) ? 'before:bg-green-600 text-green-600': 'before:bg-red-600 text-red-600'} title='1 uppercase letter (A-Z) dan 1 lowercase letter (a-z)'/>
+          <PasswordList validation={/[A-Z]/.test(form.password) ? 'before:bg-green-800 text-green-800': 'before:bg-[#D19675] text-[#D19675]'} title='1 uppercase letter (A-Z) dan 1 lowercase letter (a-z)'/>
 
-          <PasswordList validation={/[!@#$%^&*(),.?":{}|<>]/.test(form.password) ? 'before:bg-green-600 text-green-600': 'before:bg-red-600 text-red-600'} title='1 special character (e.g.,*,#,&,dsb)'/>
+          <PasswordList validation={/[!@#$%^&*(),.?":{}|<>]/.test(form.password) ? 'before:bg-green-800 text-green-800': 'before:bg-[#D19675] text-[#D19675]'} title='1 special character (e.g.,*,#,&,dsb)'/>
           </ul>
+
+          <label htmlFor="" className='text-sm font-medium'> Package
+            <input type="checkbox" className='block bg-blue-400 w-4 h-10'/>
+            <input type="checkbox" className='block bg-blue-400 w-4 h-10'/>
+            <input type="checkbox" className='block bg-blue-400 w-4 h-10'/>
+          </label>
 
           <label htmlFor="" className='text-sm font-medium'> Reason for Registration <span className='text-[#D19675] font-bold'>*</span>
             <textarea type='text' name='textArea' className='block mt-4 outline-none bg-transparent border-b border-[#BDBDBD] w-full text-sm font-light text-[#BDBDBD] tracking-wider h-32 placeholder:font-extralight' placeholder='Reason For Registration' value={form.reasonRegist} onChange={(e) => {handleChange('reasonRegist', e)}}/>
           </label>
 
           <input type="submit" className='bg-stone-200 h-32 cursor-pointer font-light tracking-widest'/>
+
           </ul>
 
           <ul>
