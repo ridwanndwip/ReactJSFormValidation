@@ -181,7 +181,7 @@ function ValidationMultiField() {
         <input type="text" name='Number Phone' value={form.numberPhone} onChange={(e) => {handleChange('numberPhone', e)}} className={`${form.numberPhone && form.numberPhone.length < 3 ? 'bg-red-300' : 'bg-none'}`}/>
         <br/><br/>
 
-        {/* {error.email} */}
+        {error.email}
         <br/>
         <label htmlFor="">Email : </label>
         <input type="text" name='Email' value={form.email} onChange={(e) => {handleChange('email', e)}}/>

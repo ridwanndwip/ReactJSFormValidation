@@ -2,8 +2,15 @@ import { useEffect, useState } from 'react'
 import InputText from './components/InputText'
 import ListCheckbox from './components/ListChcekbox'
 import PasswordValidation from './components/PasswordValidation'
-import data from './data.json'
 import React from 'react'
+
+const data = [
+  {identityNumber : 221425234, email : 'windah123@gmail.com', username :'windah', phoneNumber : 6285164742502, password : 'password1' },
+  {identityNumber : 221425534, email : 'ronaldo123@gmail.com', username :'ronaldo123', phoneNumber : 6285161743502, password : 'password2' },
+  {identityNumber : 221425236, email : 'ricardo123@gmail.com', username :'ricardokaka', phoneNumber : 6285161342502, password : 'password3' },
+  {identityNumber : 221425230, email : 'ridwandwip@gmail.com', username :'ridwan', phoneNumber : 6285153452532, password : 'password4' },
+]
+
 
 function App() {
   
@@ -18,11 +25,9 @@ function App() {
       dataAnalyst : false,
       frontEnd : false,
       backEnd : false,
-      errorPackage : ''
     },
     reasonRegist : '',
   })
-
   // Definisi State untuk menampilkan Error
   const [error, setError] = useState({
     identityNumber : '',
@@ -34,7 +39,6 @@ function App() {
       dataAnalyst : false,
       frontEnd : false,
       backEnd : false,
-      errorPackage : ''
     },
     reasonRegist : '',
   })
@@ -53,7 +57,6 @@ function App() {
         dataAnalyst : false,
         frontEnd : false,
         backEnd : false,
-        errorPackage : ''
       },
       reasonRegist : '',
     }
@@ -91,67 +94,29 @@ function App() {
     }
     setError(newError)
 
-    if (form.package.dataAnalyst === false && form.package.frontEnd === false && form.package.backEnd === false){
-      newError.package.errorPackage = 'Package cannot empty'
-    }
-    setError(newError)
-
-    if(!newError.identityNumber && !newError.email && !newError.username && !newError.phoneNumber && !newError.password && !newError.reasonRegist && !newError.package.errorPackage){
-      console.log(form)
+    if(!newError.identityNumber && !newError.email && !newError.username && !newError.phoneNumber && !newError.password && !newError.reasonRegist){
+      alert('tes')
     } else {
-      alert('I apologize, but there seems to be an error in your data')
+      alert('error')
     }
 
   }
 
   const handleChange = (field, e) => {
-
       // if (e.target.value.length < 3) {
       //   setError({...error, [field]: `isi ${field} harus lebih dari 3`})
       // } else {
       //   setError({...error, [field]: ''})
       // }
 
-    // Agar state selalu Update
-    // setForm({ ...form, [field] : e.target.value }); 
-    
-    // setForm((prevForm) => ({
-    //   ...prevForm,
-    //   package: {
-    //     ...prevForm.package,
-    //     [field]: !prevForm.package[field],
-    //   },
-    // }));
-
-    // Tentukan nilai berdasarkan tipe input (checkbox atau teks)
-  const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-
-  setForm((prevForm) => {
-    // Cek apakah field terkait dengan 'package'
-    if (field.startsWith("package.")) {
-      const subField = field.split(".")[1];  // Ambil nama subfield, seperti 'dataAnalyst'
-      
-      return {
-        ...prevForm,
-        package: {
-          ...prevForm.package,
-          [subField]: value,
-        },
-      };
-    } else {
-      return {
-        ...prevForm,
-        [field]: value,
-      };
-    }
-  });
-
+    // Selalu update state
+    setForm({ ...form, [field]: e.target.value }); 
   }
 
   return (
     <>
       <div className=' px-8 py-16 md:w-3/5 mx-auto'>
-        <h1 className='text-mainColor font-normal tracking-wide text-3xl leading-10'> ReactJS Form Validation</h1>
+        <h1 className='text-mainColor font-normal tracking-wide text-3xl leading-10'>Registration Form </h1>
         
         <form action="" className='mt-16 text-sm' onSubmit={handleSubmit}>
           
@@ -183,25 +148,24 @@ function App() {
           <li className='flex flex-col'>
               
             <label htmlFor="" className='text-sm font-medium md:text-base after:content-["*"] after:ml-0.5 after:text-[#D19675]'> Package </label>
-            <span className='mt-4 text-xs font-light tracking-wide italic leading-5 xl:w-3/4'> Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae quidem aspernatur placeat, <span className='text-[#D19675]'>porro a esse ut</span> neque beatae iste. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. </span>
+            <span className='mt-4 text-xs font-light tracking-wide italic leading-5'> Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae quidem aspernatur placeat, <span className='text-[#D19675]'>porro a esse ut</span> neque beatae iste. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. </span>
             
             <div className='flex flex-col gap-4 mt-4 relative font-extralight italic'>
             
-              <ListCheckbox titleCourse={'Data Analyst Course'} dateCourse={'2024. 10 - 15 May'} costCourse={'$300'} name={form.package.dataAnalyst} onChange={(e) => {handleChange('package.dataAnalyst', e)}}/>
+              <ListCheckbox titleCourse={'Data Analyst Course'} dateCourse={'2024. 10 - 15 May'} costCourse={'$300'} name={form.package.dataAnalyst}/>
 
-              <ListCheckbox titleCourse={'Front End Course'} dateCourse={'2024. 8 - 25 June'} costCourse={"$400"} onChange={(e) => {handleChange('package.frontEnd', e)}} name={form.package.frontEnd}/>
+              <ListCheckbox titleCourse={'Front End Course'} dateCourse={'2024. 8 - 25 June'} costCourse={"$400"}/>
 
-              <ListCheckbox titleCourse={'Back End Course'} dateCourse={'2024. 20 - 25 July'} costCourse={'$500'} onChange={(e) => {handleChange('package.backEnd', e)}} name={form.package.backEnd}/>
+              <ListCheckbox titleCourse={'Back End Course'} dateCourse={'2024. 20 - 25 July'} costCourse={'$500'}/>
 
             </div>
           </li>
-          <small className='flex-none -mt-8 text-[#D19675]'>{error.package.errorPackage}</small>
 
           <li className='flex flex-col'>
             <label htmlFor="" className='block text-sm font-medium md:text-base after:content-["*"] after:ml-0.5 after:text-[#D19675]'> Reason for Regist</label>
-            <textarea name="Reason for Regist" value={form.reasonRegist} onChange={e => {handleChange('reasonRegist', e)}} className={`block mt-4 outline-none bg-transparent border-b border-[#BDBDBD] w-full text-sm font-light text-[#BDBDBD] tracking-wider h-32 placeholder:font-extralight ${error.reasonRegist ? 'border-[#D19675]' : ''}`} placeholder='Reason For Registration'/>
+            <textarea name="Reason for Regist" value={form.reasonRegist} onChange={e => {handleChange('reasonRegist', e)}} className='block mt-4 outline-none bg-transparent border-b border-[#BDBDBD] w-full text-sm font-light text-[#BDBDBD] tracking-wider h-32 placeholder:font-extralight' placeholder='Reason For Registration'/>
           </li>  
-          <small className='flex-none -mt-8 text-[#D19675]'>{error.reasonRegist}</small>
+          <small className='flex-none -mt-8'>{error.reasonRegist}</small>
 
           <input type="submit" className='bg-stone-200 h-32 cursor-pointer font-light tracking-widest'/>
 
